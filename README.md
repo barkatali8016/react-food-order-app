@@ -1,3 +1,6 @@
+# REACT_FOOD_ORDER_APP IS ALREADY HOSTED ON NETLIFY PLEASE HAVE A LOOK. link below -
+https://react-food-order-app-barkat.netlify.app/
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
