@@ -1,47 +1,46 @@
 import classes from "./Cart.module.css";
 import Modal from "../UI/Modal";
-const DUMMY_MEALS = [
-  {
-    id: "m1",
-    name: "Sushi",
-    description: "Finest fish and veggies",
-    price: 22.99,
-  },
-  {
-    id: "m2",
-    name: "Schnitzel",
-    description: "A german specialty!",
-    price: 16.5,
-  },
-  {
-    id: "m3",
-    name: "Barbecue Burger",
-    description: "American, raw, meaty",
-    price: 12.99,
-  },
-  {
-    id: "m4",
-    name: "Green Bowl",
-    description: "Healthy...and green...",
-    price: 18.99,
-  },
-];
+import CartItem from "./CartItem/CartItem";
+import { useContext } from "react";
+import CartContext from "../../store/cart-context";
+
 const Cart = (props) => {
-  const cartItem = DUMMY_MEALS.map((meal) => (
-    <li key={meal.id}>{meal.name}</li>
+  const cartCtx = useContext(CartContext);
+  const onRemoveHandler = (id) => {
+    cartCtx.removeItem(id);
+  };
+  const onAddHandler = (item) => {
+    cartCtx.addItem({ ...item, amount: 1 });
+  };
+  const totalCartItems = cartCtx.items.length;
+  const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
+  const cartItems = cartCtx.items.map((meal) => (
+    <CartItem
+      key={meal.id}
+      price={meal.price}
+      name={meal.name}
+      summary={meal.description}
+      amount={meal.amount}
+      onRemove={onRemoveHandler.bind(null, meal.id)}
+      onAdd={onAddHandler.bind(null, meal)}
+    >
+      {meal.name}
+    </CartItem>
   ));
   return (
     <Modal onBackdropClk={props.onCloseClk}>
-      {cartItem}
+      <div className={classes["cart-items"]}>{cartItems}</div>
       <div className={classes.total}>
         <span>Total Amount</span>
-        <span>$30.56</span>
+        <span>{totalAmount}</span>
       </div>
       <div className={classes.actions}>
         <button className={classes["button-alt"]} onClick={props.onCloseClk}>
           Close
         </button>
-        <button className={classes["button"]}>Order</button>
+        {totalCartItems > 0 && (
+          <button className={classes["button"]}>Order</button>
+        )}
       </div>
     </Modal>
   );
